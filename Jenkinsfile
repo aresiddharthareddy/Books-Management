@@ -4,18 +4,11 @@ pipeline {
     environment {
         IMAGE_NAME = 'books-management-app'
         CONTAINER_NAME = 'books-app'
-        PORT = '9000'
     }
 
     stages {
 
-        stage('Checkout Code') {
-            steps {
-                git 'https://github.com/aresiddharthareddy/Books-Management.git'
-            }
-        }
-
-        stage('Build JAR') {
+        stage('Build with Maven') {
             steps {
                 sh 'mvn clean install -DskipTests'
             }
@@ -27,7 +20,7 @@ pipeline {
             }
         }
 
-        stage('Stop & Remove Existing Container') {
+        stage('Stop Existing Container') {
             steps {
                 sh '''
                     docker stop $CONTAINER_NAME || true
@@ -36,9 +29,9 @@ pipeline {
             }
         }
 
-        stage('Run Docker Container') {
+        stage('Run Docker Container Locally') {
             steps {
-                sh 'docker run -d -p $PORT:9000 --name $CONTAINER_NAME $IMAGE_NAME'
+                sh 'docker run -d -p 8081:8080 --name $CONTAINER_NAME $IMAGE_NAME'
             }
         }
     }
