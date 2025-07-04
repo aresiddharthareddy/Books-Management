@@ -1,2 +1,6 @@
 
 .idea/dataSources.xml
+/target/classes/*
+/target/test-classes/*
+/target/*
+
